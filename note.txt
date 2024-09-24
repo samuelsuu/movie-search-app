@@ -1,0 +1,190 @@
+Note on Teaching APIs with a Free API Example: Movie Database API
+An API (Application Programming Interface) allows two applications to 
+communicate with each other. 
+When you interact with a web app or mobile app (like searching for a 
+movie or checking the weather),
+ there's often an API working behind the scenes to fetch or send data 
+ from a server.
+
+Key Concepts
+Request and Response: You send an API request (like asking for movie data), and the API responds 
+with data (like movie details).
+
+HTTP Methods:
+GET: Fetch data (e.g., get movie details).
+POST: Send data (e.g., add a new movie).
+PUT/PATCH: Update data (e.g., update movie information).
+DELETE: Remove data (e.g., delete a movie).
+Endpoints: APIs expose URLs (endpoints) where requests are sent (e.g., /movies to get a list of movies).
+Authentication: Some APIs require authentication with an API key, 
+which is used to track usage and access.
+
+
+
+
+
+
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, Image, ScrollView, StyleSheet } from 'react-native';
+
+// Your OMDb API key
+const apiKey = 'c929301e';
+
+const App = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [movies, setMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [error, setError] = useState(null);
+
+  // Function to search movies from OMDb API
+  const searchMovies = () => {
+    setError(null); // Clear any previous errors
+    setSelectedMovie(null); // Clear previous selected movie details
+
+    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.Response === 'True') {
+          setMovies(data.Search); // Set movies if search is successful
+        } else {
+          setError(data.Error); // Set error if search fails
+        }
+      })
+      .catch(() => {
+        setError('An error occurred. Please try again.'); // Handle any network errors
+      });
+  };
+
+  // Function to fetch specific movie details by imdbID
+  const getMovieDetails = (imdbID) => {
+    setError(null); // Clear errors
+    setSelectedMovie(null); // Clear previous movie details
+
+    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}`)
+      .then(response => response.json())
+      .then(data => {
+        setSelectedMovie(data); // Set movie details if successful
+      })
+      .catch(() => {
+        setError('An error occurred. Please try again.'); // Handle any network errors
+      });
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      {/* Input field for movie search */}
+      <TextInput
+        style={styles.input}
+        placeholder="Search for movies"
+        value={searchTerm}
+        onChangeText={text => setSearchTerm(text)} // Update search term state
+      />
+
+      {/* Button to trigger movie search */}
+      <Button title="Search Movies" onPress={searchMovies} />
+
+      {/* Display error if any */}
+      {error && <Text style={styles.error}>{error}</Text>}
+
+      {/* Display list of movies */}
+      <View style={styles.resultsContainer}>
+        {movies.map(movie => (
+          <View key={movie.imdbID} style={styles.movieCard}>
+            <Image
+              style={styles.poster}
+              source={{ uri: movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/150' }} // Movie poster or placeholder
+            />
+            <Text style={styles.title}>{movie.Title}</Text>
+            <Text style={styles.year}>{movie.Year}</Text>
+            {/* Button to view more details about the movie */}
+            <Button title="View Details" onPress={() => getMovieDetails(movie.imdbID)} />
+          </View>
+        ))}
+      </View>
+
+      {/* Display selected movie details if any */}
+      {selectedMovie && (
+        <View style={styles.detailsContainer}>
+          <Text style={styles.detailsTitle}>{selectedMovie.Title}</Text>
+          <Text>Genre: {selectedMovie.Genre}</Text>
+          <Text>Cast: {selectedMovie.Actors}</Text>
+          <Text>Plot: {selectedMovie.Plot}</Text>
+        </View>
+      )}
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  input: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  resultsContainer: {
+    marginTop: 20,
+  },
+  movieCard: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  poster: {
+    width: 150,
+    height: 200,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  year: {
+    marginBottom: 10,
+    fontStyle: 'italic',
+  },
+  detailsContainer: {
+    marginTop: 20,
+    padding: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  detailsTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+  error: {
+    color: 'red',
+    marginTop: 10,
+  },
+});
+
+export default App;
+
+
+postman test
+
+http://www.omdbapi.com/?apikey=c929301e&s=Inception
+http://www.omdbapi.com/?apikey=c929301e&
+
+https://www.omdbapi.com/
+
+http://www.omdbapi.com/?apikey=c929301e&s=Inception&y=2010
+
+
+Drawer
+npm install @react-navigation/native
+npm install @react-navigation/drawer
+npm install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
+
+
+
+for any system error
+ npx expo-doctor
+ npx expo install --check
+ npm install expo@latest
