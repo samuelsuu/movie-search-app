@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 
 const Drawer = createDrawerNavigator();
 
+
 // Prevent the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
@@ -31,8 +32,8 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>
         <Drawer.Navigator initialRouteName="Home">
-          <Drawer.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
-          <Drawer.Screen name="Detail" component={DetailScreen} options={{headerShown: false}} />
+          <Drawer.Screen name="Home" component={HomeScreen} options={{title: "SU Movies Search"}}/>
+          <Drawer.Screen name="Detail" component={DetailScreen} options={{title: "Movie Detail"}}/>
         </Drawer.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

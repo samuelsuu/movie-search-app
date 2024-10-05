@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Image, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Image, ScrollView, StyleSheet, SafeAreaView } from 'react-native';
 import SplashScreen from './SplashScreen';
 
 // Your OMDb API key
@@ -31,7 +31,7 @@ const HomeScreen = ({ navigation }) => {
   const fetchDefaultMovies = () => {
     setError(null);
 
-    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=Ironman`)
+    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=Avengers`)
       .then(response => response.json())
       .then(data => {
         if (data.Response === 'True') {
@@ -48,7 +48,7 @@ const HomeScreen = ({ navigation }) => {
   const searchMovies = () => {
     setError(null);
 
-    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}`)
+    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}`)
       .then(response => response.json())
       .then(data => {
         if (data.Response === 'True') {
@@ -65,7 +65,7 @@ const HomeScreen = ({ navigation }) => {
   const getMovieDetails = (imdbID) => {
     setError(null);
 
-    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}`)
+    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}`)
       .then(response => response.json())
       .then(data => {
         navigation.navigate('Detail', { movieDetails: data });
@@ -81,7 +81,9 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return (
+    
     <ScrollView style={styles.container}>
+      <SafeAreaView>
       <TextInput
         style={styles.input}
         placeholder="Search for movies"
@@ -103,7 +105,9 @@ const HomeScreen = ({ navigation }) => {
           </View>
         ))}
       </View>
+      </SafeAreaView>
     </ScrollView>
+    
   );
 };
 
@@ -122,6 +126,7 @@ const styles = StyleSheet.create({
   },
   resultsContainer: {
     marginTop: 20,
+    marginBottom: 70,
   },
   movieCard: {
     marginBottom: 20,

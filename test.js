@@ -76,10 +76,7 @@ const HomeScreen = () => {
     // API call to fetch movie details using IMDb ID
     fetch(`http://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}`)
       .then(response => response.json()) // Parse JSON response
-      .then(data => {
-        // Set the selected movie's details if the call is successful
-        setSelectedMovie(data);
-      })
+     
       .catch(() => {
         // Show a generic error message if something goes wrong
         setError('An error occurred. Please try again.');
@@ -99,7 +96,10 @@ const HomeScreen = () => {
       {/* Button to trigger the movie search */}
       <Button title="Search Movies" onPress={searchMovies} />
 
-      {/* Display an error message if any */}
+      {/*  .then(data => {
+        // Set the selected movie's details if the call is successful
+        setSelectedMovie(data);
+      })Display an error message if any */}
       {error && <Text style={styles.error}>{error}</Text>}
 
       {/* Display the list of movies returned by the API */}
