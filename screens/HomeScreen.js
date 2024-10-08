@@ -31,7 +31,7 @@ const HomeScreen = ({ navigation }) => {
   const fetchDefaultMovies = () => {
     setError(null);
 
-    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=Avengers`)
+    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=Avengers`)
       .then(response => response.json())
       .then(data => {
         if (data.Response === 'True') {
@@ -48,7 +48,7 @@ const HomeScreen = ({ navigation }) => {
   const searchMovies = () => {
     setError(null);
 
-    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}`)
+    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}`)
       .then(response => response.json())
       .then(data => {
         if (data.Response === 'True') {
@@ -65,7 +65,7 @@ const HomeScreen = ({ navigation }) => {
   const getMovieDetails = (imdbID) => {
     setError(null);
 
-    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}`)
+    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}`)
       .then(response => response.json())
       .then(data => {
         navigation.navigate('Detail', { movieDetails: data });
