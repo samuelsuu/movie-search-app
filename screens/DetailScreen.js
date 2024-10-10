@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProfileScreen = ({ route }) => {
   // Destructure movieDetails from route.params, but check if route.params is defined
-  const { movieDetails } = route.params || {};  // Add a fallback in case route.params is undefined
+  const { movieDetails } = route.params || {}; // Add a fallback in case route.params is undefined
 
   if (!movieDetails) {
     return (
@@ -16,6 +16,15 @@ const ProfileScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Image
+        style={styles.poster}
+        source={{
+          uri:
+          movieDetails.Poster !== "N/A"
+              ? movieDetails.Poster
+              : "https://via.placeholder.com/150",
+        }}
+      />
       <Text style={styles.title}>{movieDetails.Title}</Text>
       {/* Display movie rating */}
       <Text>Rating: {movieDetails.Rated}</Text>
@@ -30,24 +39,29 @@ const ProfileScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  poster: {
+    width: 250,
+    height: 350,
     marginBottom: 10,
   },
   plot: {
     lineHeight: 25,
     paddingVertical: 20,
-    textAlign: 'justify',
+    textAlign: "justify",
     fontSize: 15,
   },
   errorText: {
     fontSize: 18,
-    color: 'red',
+    color: "red",
   },
 });
 
