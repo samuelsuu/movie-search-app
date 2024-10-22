@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
-import { View, Text, Switch, StyleSheet } from 'react-native';
-import { ThemeContext } from '../models/ThemeContext'; // Ensure correct import
+import React, { useContext } from "react";
+import { View, Text, Switch, StyleSheet } from "react-native";
+import { ThemeContext } from "../models/ThemeContext"; // Ensure correct import
+import WhatsAppLink from "../models/WhatsAppLink";
 
 export default function SettingsScreen() {
   const { isDarkMode, toggleTheme } = useContext(ThemeContext); // Use ThemeContext
@@ -11,14 +12,18 @@ export default function SettingsScreen() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: isDarkMode ? '#121212' : '#FFF' }]}>
-      <Text style={[styles.text, { color: isDarkMode ? '#FFF' : '#000' }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDarkMode ? "#121212" : "#FFF" },
+      ]}
+    >
+      <Text style={[styles.text, { color: isDarkMode ? "#FFF" : "#000" }]}>
         Dark Mode
       </Text>
-      <Switch
-        value={isDarkMode}
-        onValueChange={toggleTheme}
-      />
+      <Switch value={isDarkMode} onValueChange={toggleTheme} />
+
+      <WhatsAppLink />
     </View>
   );
 }
@@ -26,8 +31,8 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     fontSize: 18,
