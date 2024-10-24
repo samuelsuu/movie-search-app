@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ThemeContext } from '../models/ThemeContext'; // Import ThemeContext
 
 const ProfileScreen = ({ route }) => {
-  // Destructure movieDetails from route.params, but check if route.params is defined
-  const { movieDetails } = route.params || {}; // Add a fallback in case route.params is undefined
+  // Destructure movieDetails from route.params
+  const { movieDetails } = route.params || {};
+  
+  // Access isDarkMode from ThemeContext
+  const { isDarkMode } = useContext(ThemeContext);
 
   if (!movieDetails) {
     return (
@@ -15,23 +19,19 @@ const ProfileScreen = ({ route }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDarkMode ? '#121212' : '#FFF' }]}>
       <Image
         style={styles.poster}
         source={{
-          uri:
-          movieDetails.Poster !== "N/A"
-              ? movieDetails.Poster
-              : "https://via.placeholder.com/150",
+          uri: movieDetails.Poster !== "N/A" ? movieDetails.Poster : "https://via.placeholder.com/150",
         }}
       />
-      <Text style={styles.title}>{movieDetails.Title}</Text>
-      {/* Display movie rating */}
-      <Text>Rating: {movieDetails.Rated}</Text>
-      <Text>Genre: {movieDetails.Genre}</Text>
-      <Text>Actors: {movieDetails.Actors}</Text>
-      <Text style={styles.plot}>Plot: {movieDetails.Plot}</Text>
-      <Text>Year: {movieDetails.Year}</Text>
+      <Text style={[styles.title, { color: isDarkMode ? '#FFF' : '#000' }]}>{movieDetails.Title}</Text>
+      <Text style={{ color: isDarkMode ? '#FFF' : '#000' }}>Rating: {movieDetails.Rated}</Text>
+      <Text style={{ color: isDarkMode ? '#FFF' : '#000' }}>Genre: {movieDetails.Genre}</Text>
+      <Text style={{ color: isDarkMode ? '#FFF' : '#000' }}>Actors: {movieDetails.Actors}</Text>
+      <Text style={[styles.plot, { color: isDarkMode ? '#FFF' : '#000' }]}>Plot: {movieDetails.Plot}</Text>
+      <Text style={{ color: isDarkMode ? '#FFF' : '#000' }}>Year: {movieDetails.Year}</Text>
     </SafeAreaView>
   );
 };

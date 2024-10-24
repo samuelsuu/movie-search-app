@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, Button, Image, ScrollView, StyleSheet, SafeAreaView } from 'react-native';
 import SplashScreen from './SplashScreen';
+import { ThemeContext } from '../models/ThemeContext'; // Import the ThemeContext
 
-// Your OMDb API key
 const apiKey = 'c929301e';
 
 const HomeScreen = ({ navigation }) => {
@@ -11,17 +11,18 @@ const HomeScreen = ({ navigation }) => {
   const [error, setError] = useState(null);
   const [showSplash, setShowSplash] = useState(true); // Splash initially visible
 
+  // Access the isDarkMode and toggleTheme from ThemeContext
+  const { isDarkMode } = useContext(ThemeContext);
+
   // Hide the splash screen after a delay
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setShowSplash(false);
     }, 3000); // Change the duration if needed
 
-    // Cleanup function to clear the timeout if the component unmounts
     return () => clearTimeout(timeoutId);
   }, []);
 
-  // Fetch default movies when component loads
   useEffect(() => {
     if (!showSplash) {
       fetchDefaultMovies();
@@ -31,7 +32,7 @@ const HomeScreen = ({ navigation }) => {
   const fetchDefaultMovies = () => {
     setError(null);
 
-    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=Avengers`)
+    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=Avengers`)
       .then(response => response.json())
       .then(data => {
         if (data.Response === 'True') {
@@ -48,7 +49,7 @@ const HomeScreen = ({ navigation }) => {
   const searchMovies = () => {
     setError(null);
 
-    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}`)
+    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}`)
       .then(response => response.json())
       .then(data => {
         if (data.Response === 'True') {
@@ -65,7 +66,7 @@ const HomeScreen = ({ navigation }) => {
   const getMovieDetails = (imdbID) => {
     setError(null);
 
-    fetch(`http://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}`)
+    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}`)
       .then(response => response.json())
       .then(data => {
         navigation.navigate('Detail', { movieDetails: data });
@@ -75,39 +76,37 @@ const HomeScreen = ({ navigation }) => {
       });
   };
 
-  // If the splash screen is visible, return it
   if (showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
   }
 
   return (
-    
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, { backgroundColor: isDarkMode ? '#121212' : '#FFF' }]}>
       <SafeAreaView>
-      <TextInput
-        style={styles.input}
-        placeholder="Search for movies"
-        value={searchTerm}
-        onChangeText={text => setSearchTerm(text)}
-      />
-      <Button title="Search Movies" onPress={searchMovies} />
-      {error && <Text style={styles.error}>{error}</Text>}
-      <View style={styles.resultsContainer}>
-        {movies.map(movie => (
-          <View key={movie.imdbID} style={styles.movieCard}>
-            <Image
-              style={styles.poster}
-              source={{ uri: movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/150' }}
-            />
-            <Text style={styles.title}>{movie.Title}</Text>
-            <Text style={styles.year}>{movie.Year}</Text>
-            <Button title="View Details" onPress={() => getMovieDetails(movie.imdbID)} />
-          </View>
-        ))}
-      </View>
+        <TextInput
+          style={[styles.input, { backgroundColor: isDarkMode ? '#333' : '#FFF', color: isDarkMode ? '#FFF' : '#000' }]}
+          placeholder="Search for movies"
+          placeholderTextColor={isDarkMode ? '#888' : '#333'}
+          value={searchTerm}
+          onChangeText={text => setSearchTerm(text)}
+        />
+        <Button title="Search Movies" onPress={searchMovies} />
+        {error && <Text style={[styles.error, { color: 'red' }]}>{error}</Text>}
+        <View style={styles.resultsContainer}>
+          {movies.map(movie => (
+            <View key={movie.imdbID} style={styles.movieCard}>
+              <Image
+                style={styles.poster}
+                source={{ uri: movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/150' }}
+              />
+              <Text style={[styles.title, { color: isDarkMode ? '#FFF' : '#000' }]}>{movie.Title}</Text>
+              <Text style={[styles.year, { color: isDarkMode ? '#FFF' : '#000' }]}>{movie.Year}</Text>
+              <Button title="View Details" onPress={() => getMovieDetails(movie.imdbID)} />
+            </View>
+          ))}
+        </View>
       </SafeAreaView>
     </ScrollView>
-    
   );
 };
 
